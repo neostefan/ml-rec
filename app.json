@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ml recorder",
-    "slug": "ml-recorder",
+    "name": "mlrec",
+    "slug": "ml-rec",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app-icon.png",
@@ -19,21 +19,21 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.laugh.recorder"
+      "bundleIdentifier": "com.laugh.mlrec"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/save.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.laugh_detection.ml_recorder"
+      "package": "com.laugh.mlrec"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "5389d8fb-acf9-449e-a535-b27fc0693c7d"
+        "projectId": "82a6c024-2384-43b6-ab31-d8db588eb928"
       }
     }
   }
