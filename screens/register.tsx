@@ -25,7 +25,7 @@ const Register: React.FC = () => {
 
     let handleSignUp = async () => {
         try {
-            let response = await fetch("http://20.108.66.200:3000/auth/register", {
+            let response = await fetch("http://213.168.250.5:3000/auth/register", {
                 headers: { 'Content-Type': 'application/json' },
                 method: 'POST',
                 body: JSON.stringify({

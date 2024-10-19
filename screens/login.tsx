@@ -32,7 +32,7 @@ const LogIn: React.FC<Props> = ({ navigator }) => {
     let handleSignIn = async () => {
         
         try {
-            let res = await fetch("http://20.108.66.200:3000/auth/login", {
+            let res = await fetch("http://213.168.250.5:3000/auth/login", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -48,8 +48,9 @@ const LogIn: React.FC<Props> = ({ navigator }) => {
                 await setJwtToken(decodedRes.token)
                 navigator.navigate('Home')
             } else {
-                setHasMsg(true)
+                console.log("i got here...")
                 setMsg({body: decodedRes.msg, type: MessageType.ERROR})
+                setHasMsg(true)
             }
         } catch(e) {
             if(typeof e == "string") {
@@ -57,6 +58,7 @@ const LogIn: React.FC<Props> = ({ navigator }) => {
             } else {
                 setMsg({body: e.message, type: MessageType.ERROR})
             }
+            setHasMsg(true)
         }
 
     }

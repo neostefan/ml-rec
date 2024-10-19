@@ -1,6 +1,6 @@
 import React from "react";
 import tw from "twrnc";
-import { View, Text, TouchableOpacity, GestureResponderEvent, Pressable } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -9,6 +9,15 @@ import Notification from "../components/notification";
 
 import { Message, MessageType } from "../util/definitions-util";
 import { getJwtToken } from "../util/auth-token-util";
+
+//! Test this on next allocation
+// const CustomRecordingOptions: Audio.RecordingOptions = {
+//     android: {
+//         extension: '.wav',
+//         audioEncoder: Audio.AndroidAudioEncoder.DEFAULT,
+//         outputFormat: Audio.AndroidOutputFormat.DEFAULT,
+//     }
+// }
 
 const Capture: React.FC = () => {
     
@@ -46,7 +55,7 @@ const Capture: React.FC = () => {
     };
 
     let _updateScreenForFileUpload = (uploadProgress) => {
-        let progress = Math.floor((uploadProgress.totalByteSent / uploadProgress.totalBytesExpectedToSend) * 100)
+        let progress = Math.floor((uploadProgress.totalBytesSent / uploadProgress.totalBytesExpectedToSend) * 100)
         setUploadProgress(progress)
         setNotification({body: "Uploading: " + progress + "%", type: MessageType.INFO})
         setHasNotification(true)
@@ -54,7 +63,6 @@ const Capture: React.FC = () => {
             setIsUploading(true)
         }
     }
-
 
     let startRecording = async () => {
         try {
@@ -67,6 +75,13 @@ const Capture: React.FC = () => {
                 await recorder.current.prepareToRecordAsync( Audio.RecordingOptionsPresets.HIGH_QUALITY);
                 recorder.current.setOnRecordingStatusUpdate(_updateScreenForRecordingStatus)
                 await recorder.current.startAsync()
+                
+                //! Not tested yet...
+                //After 5mins stop and send the sample to the server
+                // setTimeout(async () => {
+                //     await stopRecordingAndSendFile()
+                //     await startRecording()
+                // }, 300000)
             }
         } catch(e: any) {
             setHasNotification(true)
@@ -84,7 +99,7 @@ const Capture: React.FC = () => {
 
             let uri = recorder.current.getURI()
             recorder.current = new Audio.Recording()
-            let task = FileSystem.createUploadTask("http://20.108.66.200:3000/laugh", uri, {
+            let task = FileSystem.createUploadTask("http://213.168.250.5:3000/laugh", uri, {
                 httpMethod: "POST",
                 uploadType: FileSystem.FileSystemUploadType.MULTIPART,
                 fieldName: "sample",
@@ -109,14 +124,17 @@ const Capture: React.FC = () => {
             }
         }catch(e: any) {
             console.log(e)
-            setHasNotification(true)
             if(typeof e == "string") {
                 setNotification({body: e, type: MessageType.ERROR})
             } else {
                 setNotification({body: e.message, type: MessageType.ERROR})
             }
+            setHasNotification(true)
         }
     }
+
+    // to send the recorded data in a streaming format 
+    // recorder.current.setOnRecordingStatusUpdate()
 
     let zeroDisplay = (value: number): string => {
         let valueInString = value.toString()

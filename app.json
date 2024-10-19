@@ -26,7 +26,8 @@
         "foregroundImage": "./assets/save.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.laugh.mlrec"
+      "package": "com.laugh.mlrec",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"

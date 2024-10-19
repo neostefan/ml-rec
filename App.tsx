@@ -7,23 +7,36 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { deactivateKeepAwake } from "expo-keep-awake";
 import { useFonts, Anton_400Regular } from "@expo-google-fonts/anton";
 import tw from "twrnc";
+import * as Notifications from "expo-notifications";
 
 import { AuthSelector, Capture, Analyzer, Profile } from './screens';
 
 import { RootStackParamList, RootTabParamList } from "./util/navigation-util"
 import { getJwtToken } from "./util/auth-token-util";
 import ErrorBoundary from './util/error-boundary';
+import useNotification from './hooks/useNotification';
 
 const Tab = createBottomTabNavigator<RootTabParamList>()
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export default function App() {
-
+  const { registerForPushNotificationsAsync } = useNotification(); 
   let [userToken, setUserToken] = React.useState<string | null>(null)
   let [error, setError] = React.useState<string | null>(null)
 
   deactivateKeepAwake()
   React.useEffect(() => {
+    
+    registerForPushNotificationsAsync();
+
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+
     let fetchAuthUser = async () => {
       try {
         let token = await getJwtToken()
@@ -50,7 +63,6 @@ export default function App() {
   //{userToken ? 'Home' : 'Auth'}
 
   return (
-    
         <ErrorBoundary errorMsg={error}>
           <NavigationContainer>
             <Stack.Navigator initialRouteName={userToken ? 'Home' : 'Auth'} screenOptions={() => ({
